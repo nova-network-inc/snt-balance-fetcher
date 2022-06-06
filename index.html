@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Network, SNT Balance Fetcher</title>
+
+    <script type="text/javascript" src="./web3.min.js"></script>
+
+    <script type="text/javascript">
+        window.addEventListener('load', function () {
+            if (typeof web3 !== 'undefined') {
+                console.log('Web3 Detected! ' + web3.currentProvider.constructor.name)
+                window.web3 = new Web3(web3.currentProvider);
+            } else {
+                console.log('No Web3 Detected... Using HTTP RPC Provider...')
+                window.web3 = new Web3(new Web3.providers.HttpProvider("https://connect.novanetwork.io/"));
+            }
+        })
+        function getBalance() {
+            var address, wei, balance
+            address = document.getElementById("address").value
+            try {
+                web3.eth.getBalance(address, function (error, wei) {
+                    if (!error) {
+                        var balance = web3.utils.fromWei(wei, 'ether');
+                        document.getElementById("output").innerHTML = balance + " SNT in this account.";
+                    }
+                });
+            } catch (err) {
+                document.getElementById("output").innerHTML = err;
+            }
+        }
+    </script>
+
+    <style>
+        body {
+          font-family: 'work sans';
+          }
+    </style>
+
+</head>
+<body>
+    <h1>SNT Balance Fetcher</h1>
+    <p>Enter your Nova Network Address:</p>
+    <input type="text" size="50" id="address" />
+    <button type="button" onClick="getBalance();">Get Balance</button>
+    <br />
+    <br />
+    <b><div id="output"></div></b>
+    <br />
+    <p style="font-size:10pt">Script by Paulo Baronceli</p>
+    <p style="font-size:10pt"><b>Copyright © 2022 Nova Network Inc.</b></p>
+</body>
+</html>
